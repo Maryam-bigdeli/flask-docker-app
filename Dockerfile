@@ -1,18 +1,23 @@
-# 1️⃣ استفاده از نسخه سبک پایتون
-FROM python:3.10-slim
+# 1) Use a small, official Python base image
+FROM python:3.12-slim
 
-# 2️⃣ تنظیم پوشه کاری داخل کانتینر
+# 2) Ensure Python runs cleanly in containers
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# 3) Create and switch to a working directory
 WORKDIR /app
 
-# 3️⃣ کپی کردن همه فایل‌ها به داخل کانتینر
-COPY . .
-
-# 4️⃣ نصب پکیج‌های لازم
+# 4) Install deps in a cached layer (copy only requirements first)
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5️⃣ اعلام پورت برنامه
+# 5) Copy your application code
+COPY . .
+
+# 6) Document the container-internal port Flask listens on
 EXPOSE 5000
 
-# 6️⃣ اجرای برنامه
+# 7) Run the app (Flask dev server is OK for learning; use Gunicorn for prod)
 CMD ["python", "app.py"]
 
