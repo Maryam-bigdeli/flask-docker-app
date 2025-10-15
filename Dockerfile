@@ -12,9 +12,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5) Copy your application code
-COPY . .
-
 # 6) Document the container-internal port Flask listens on
 EXPOSE 5000
 
