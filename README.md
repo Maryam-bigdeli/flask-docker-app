@@ -123,3 +123,58 @@ This allows access from outside the container.
 Settings → Resources → WSL Integration → Enable Ubuntu.
 
 * For production, use a proper WSGI server (e.g., Gunicorn) instead of Flask’s built-in development server.
+
+### Third Task⚙️ Learn About Docker Compose Syntax & Expose Flask App on Local Port
+
+* Understand the basic Docker Compose syntax (YAML structure)
+
+* Expose the Flask app running inside the container to your local system (localhost)
+---
+
+### 📁 Example docker-compose.yml
+```yaml
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: flask_docker_app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+```
+---
+
+### 📜 Flask App Configuration
+
+Make sure your `app.py` runs on all interfaces:
+```python
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
+```
+---
+
+### 🚀 Run the App
+| Command                        | Description                   |
+| ------------------------------ | ----------------------------- |
+| `docker compose up --build`    | Build and start the container |
+| `docker compose down`          | Stop and remove containers    |
+| `docker ps`                    | Show running containers       |
+| `docker logs flask_docker_app` | View logs of the container    |
+
+
+Then open your browser and go to:
+👉 http://localhost:5000
+
+---
+
+### ⚠️ Notes
+
+* Use spaces, not tabs, in YAML files.
+
+* 5000:5000 maps container port → local port.
+
+* Ensure Docker Desktop’s WSL integration is enabled on Windows.
+
+* Use 0.0.0.0 in Flask so it’s accessible from outside the container.
